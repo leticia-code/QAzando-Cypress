@@ -1,0 +1,30 @@
+name: Run Basic Testes
+
+on:
+   schedule: 
+   - cron: '0 20 * * 1-5'
+
+
+jobs:
+    cypress-run:
+        runs-on: ubuntu-latest
+
+        steps:
+         - name: Checkout/Clone do projeto
+           uses: actions/checkout@v4
+
+         - name: Instalar dependencias do projeto
+           run: npm install
+
+         - name: Run testes
+           uses: cypress-io/github-action@v6
+           with:
+             record: true
+           env: 
+             CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+
+         - name: Upload relatório
+           uses: actions/upload-artifact@v4
+           with:
+             name: my-artifact
+             path: cypress/reports/html
